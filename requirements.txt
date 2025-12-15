@@ -1,0 +1,21 @@
+# Requisitos del sistema para Inventarios SaaS
+
+Docker >= 27.x
+Docker Compose >= 2.30
+
+Node.js >= 20.x
+npm >= 10.x
+
+Git >= 2.40
+
+Sistema Operativo:
+- Linux (recomendado)
+- macOS
+- Windows (con WSL2)
+
+Puertos requeridos:
+- 3000 (Backend)
+- 5432 (PostgreSQL)
+
+Zona horaria recomendada:
+- America/Bogota

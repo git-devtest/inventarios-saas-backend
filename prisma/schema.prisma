@@ -1,0 +1,54 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Empresa {
+  id                  String   @id @default(uuid())
+  nombre              String
+  nit                 String   @unique
+  estado              Boolean  @default(true)
+  fecha_creacion      DateTime @default(now())
+  fecha_actualizacion DateTime @updatedAt
+
+  usuarios            Usuario[]
+
+  @@map("empresas")
+}
+
+model Rol {
+  id                  String   @id @default(uuid())
+  nombre              String   @unique
+  descripcion         String?
+  estado              Boolean  @default(true)
+  fecha_creacion      DateTime @default(now())
+  fecha_actualizacion DateTime @updatedAt
+
+  usuarios            Usuario[]
+
+  @@map("roles")
+}
+
+model Usuario {
+  id                  String   @id @default(uuid())
+  nombre              String
+  apellido            String
+  email               String   @unique
+  password_hash       String
+  estado              Boolean  @default(true)
+
+  empresa_id          String
+  rol_id              String
+
+  fecha_creacion      DateTime @default(now())
+  fecha_actualizacion DateTime @updatedAt
+
+  // Relaciones
+  empresa             Empresa  @relation(fields: [empresa_id], references: [id])
+  rol                 Rol      @relation(fields: [rol_id], references: [id])
+
+  @@map("usuarios")
+}
