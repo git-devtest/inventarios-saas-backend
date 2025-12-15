@@ -27,19 +27,19 @@ El sistema está diseñado para ser multiempresa, con múltiples almacenes, ubic
 
 ## Estructura del Proyecto
 ```bash
-inventarios-saas/
-│
-├── backend/            # API NestJS
-│ ├── prisma/           # Schema y migraciones
-│ ├── src/              # Código fuente
-│ └── test/             # Tests unitarios e integración
+inventarios-saas-backend/
 │
 ├── docs/               # Documentación funcional y técnica
+├── prisma/             # Schema y migraciones
+├── src/                # Código fuente
+└── test/               # Tests unitarios e integración
 │
+├── .env                # Variables de entorno (NO subir a git)
 ├── .gitignore          # Archivos ignorados por git
 ├── docker-compose.yml  # Infraestructura local
-├── .env                # Variables de entorno (NO subir a git)
-└── README.md           # Usted está aquí
+├── prisma.config.ts    # Configuración de Prisma
+├── README.md           # Usted está aquí
+└── requirements.txt    # Requerimientos del sistema
 ```
 
 ## Requisitos del Sistema
