@@ -4,17 +4,27 @@ generator client {
 
 datasource db {
   provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
-model Empresa {
-  id                  String   @id @default(uuid())
-  nombre              String
-  nit                 String   @unique
-  estado              Boolean  @default(true)
-  fecha_creacion      DateTime @default(now())
-  fecha_actualizacion DateTime @updatedAt
+// =====================================================
+// TABLAS NÚCLEO
+// =====================================================
 
-  usuarios            Usuario[]
+model Empresa {
+  id                      String   @id @default(uuid())
+  nombre                  String
+  identificacion_fiscal   String   @unique
+  activo                  Boolean  @default(true)
+  fecha_creacion          DateTime @default(now())
+  fecha_actualizacion     DateTime @updatedAt
+
+  // Relaciones
+  usuarios                Usuario[]
+  almacenes               Almacen[]
+  productos               Producto[]
+  movimientos             MovimientoInventario[]
+  tipos_movimiento_custom TipoMovimiento[]
 
   @@map("empresas")
 }
@@ -23,32 +33,251 @@ model Rol {
   id                  String   @id @default(uuid())
   nombre              String   @unique
   descripcion         String?
-  estado              Boolean  @default(true)
   fecha_creacion      DateTime @default(now())
-  fecha_actualizacion DateTime @updatedAt
 
+  // Relaciones
   usuarios            Usuario[]
 
   @@map("roles")
 }
 
 model Usuario {
-  id                  String   @id @default(uuid())
-  nombre              String
-  apellido            String
-  email               String   @unique
-  password_hash       String
-  estado              Boolean  @default(true)
-
+  id                  String    @id @default(uuid())
   empresa_id          String
   rol_id              String
-
-  fecha_creacion      DateTime @default(now())
-  fecha_actualizacion DateTime @updatedAt
+  nombre              String
+  email               String    @unique
+  password_hash       String
+  activo              Boolean   @default(true)
+  ultimo_acceso       DateTime?
+  fecha_creacion      DateTime  @default(now())
+  fecha_actualizacion DateTime  @updatedAt
 
   // Relaciones
-  empresa             Empresa  @relation(fields: [empresa_id], references: [id])
-  rol                 Rol      @relation(fields: [rol_id], references: [id])
+  empresa                 Empresa                 @relation(fields: [empresa_id], references: [id])
+  rol                     Rol                     @relation(fields: [rol_id], references: [id])
+  movimientos_creados     MovimientoInventario[]  @relation("MovimientoUsuario")
+  movimientos_confirmados MovimientoInventario[]  @relation("MovimientoUsuarioConfirmacion")
 
   @@map("usuarios")
+}
+
+// =====================================================
+// ALMACENES Y UBICACIONES
+// =====================================================
+
+model Almacen {
+  id                  String      @id @default(uuid())
+  empresa_id          String
+  nombre              String
+  codigo              String
+  direccion           String?
+  activo              Boolean     @default(true)
+  fecha_creacion      DateTime    @default(now())
+  fecha_actualizacion DateTime?   @updatedAt
+
+  // Relaciones
+  empresa             Empresa                 @relation(fields: [empresa_id], references: [id])
+  ubicaciones         Ubicacion[]
+  movimientos_origen  MovimientoInventario[]  @relation("AlmacenOrigen")
+  movimientos_destino MovimientoInventario[]  @relation("AlmacenDestino")
+  producto_almacenes  ProductoAlmacen[]
+
+  @@unique([empresa_id, codigo])
+  @@map("almacenes")
+}
+
+model Ubicacion {
+  id                  String      @id @default(uuid())
+  almacen_id          String
+  ubicacion_padre_id  String?
+  nombre              String
+  codigo              String
+  nivel               Int         @default(1)
+  ruta_completa       String?
+  fecha_creacion      DateTime    @default(now())
+  fecha_actualizacion DateTime?   @updatedAt
+
+  // Relaciones
+  almacen             Almacen                 @relation(fields: [almacen_id], references: [id])
+  ubicacion_padre     Ubicacion?              @relation("UbicacionJerarquia", fields: [ubicacion_padre_id], references: [id])
+  ubicaciones_hijas   Ubicacion[]             @relation("UbicacionJerarquia")
+  movimientos_origen  MovimientoInventario[]  @relation("UbicacionOrigen")
+  movimientos_destino MovimientoInventario[]  @relation("UbicacionDestino")
+  producto_almacenes  ProductoAlmacen[]
+
+  @@unique([almacen_id, codigo])
+  @@map("ubicaciones")
+}
+
+// =====================================================
+// PRODUCTOS Y UNIDADES
+// =====================================================
+
+model UnidadMedida {
+  id                       String                 @id @default(uuid())
+  nombre                   String                 @unique
+  abreviatura              String                 @unique
+  tipo                     String // peso, volumen, longitud, unidad, otro
+  fecha_creacion           DateTime               @default(now())
+
+  // Relaciones
+  producto_unidad_medidas  ProductoUnidadMedida[]
+
+  @@map("unidades_medida")
+}
+
+model Producto {
+  id                      String    @id @default(uuid())
+  empresa_id              String
+  codigo                  String
+  nombre                  String
+  descripcion             String?
+  campos_personalizados   Json?
+  requiere_lote           Boolean   @default(false)
+  requiere_serie          Boolean   @default(false)
+  dias_vencimiento        Int?
+  permite_stock_negativo  Boolean   @default(false)
+  activo                  Boolean   @default(true)
+  fecha_creacion          DateTime  @default(now())
+  fecha_actualizacion     DateTime? @updatedAt
+
+  // Relaciones
+  empresa                 Empresa               @relation(fields: [empresa_id], references: [id])
+  unidades_medida         ProductoUnidadMedida[]
+  detalles_movimiento     DetalleMovimiento[]
+  producto_almacenes      ProductoAlmacen[]
+  lotes                   Lote[]
+
+  @@unique([empresa_id, codigo])
+  @@map("productos")
+}
+
+model ProductoUnidadMedida {
+  id                  String   @id @default(uuid())
+  producto_id         String
+  unidad_medida_id    String
+  factor_conversion   Decimal  @db.Decimal(12, 4)
+  es_principal        Boolean  @default(false)
+  fecha_creacion      DateTime @default(now())
+
+  // Relaciones
+  producto            Producto      @relation(fields: [producto_id], references: [id])
+  unidad_medida       UnidadMedida  @relation(fields: [unidad_medida_id], references: [id])
+  detalles_movimiento DetalleMovimiento[]
+
+  @@unique([producto_id, unidad_medida_id])
+  @@map("producto_unidad_medida")
+}
+
+model ProductoAlmacen {
+  id                  String    @id @default(uuid())
+  producto_id         String
+  almacen_id          String
+  ubicacion_id        String?
+  stock_minimo        Decimal   @default(0) @db.Decimal(14, 4)
+  stock_maximo        Decimal?  @db.Decimal(14, 4)
+  punto_reorden       Decimal?  @db.Decimal(14, 4)
+  activo              Boolean   @default(true)
+  fecha_creacion      DateTime  @default(now())
+  fecha_actualizacion DateTime? @updatedAt
+
+  // Relaciones
+  producto            Producto   @relation(fields: [producto_id], references: [id])
+  almacen             Almacen    @relation(fields: [almacen_id], references: [id])
+  ubicacion           Ubicacion? @relation(fields: [ubicacion_id], references: [id])
+
+  @@unique([producto_id, almacen_id, ubicacion_id])
+  @@map("producto_almacen")
+}
+
+model Lote {
+  id                  String    @id @default(uuid())
+  producto_id         String
+  codigo_lote         String
+  fecha_fabricacion   DateTime?
+  fecha_vencimiento   DateTime?
+  proveedor           String?
+  observaciones       String?
+  activo              Boolean   @default(true)
+  fecha_creacion      DateTime  @default(now())
+
+  // Relaciones
+  producto            Producto  @relation(fields: [producto_id], references: [id])
+
+  @@unique([producto_id, codigo_lote])
+  @@map("lotes")
+}
+
+// =====================================================
+// MOVIMIENTOS DE INVENTARIO
+// =====================================================
+
+model TipoMovimiento {
+  id                  String    @id @default(uuid())
+  codigo              String
+  nombre              String
+  afecta_stock        Int // 1 = incrementa, -1 = decrementa, 0 = neutro
+  requiere_destino    Boolean   @default(false)
+  empresa_id          String?
+  activo              Boolean   @default(true)
+  es_sistema          Boolean   @default(false)
+  fecha_creacion      DateTime  @default(now())
+
+  // Relaciones
+  empresa             Empresa?              @relation(fields: [empresa_id], references: [id])
+  movimientos         MovimientoInventario[]
+
+  @@unique([codigo, empresa_id])
+  @@map("tipos_movimiento")
+}
+
+model MovimientoInventario {
+  id                       String    @id @default(uuid())
+  empresa_id               String
+  tipo_movimiento_id       String
+  almacen_origen_id        String
+  ubicacion_origen_id      String?
+  almacen_destino_id       String?
+  ubicacion_destino_id     String?
+  fecha_movimiento         DateTime
+  usuario_id               String
+  estado                   String    @default("borrador") // borrador, confirmado, anulado
+  fecha_confirmacion       DateTime?
+  usuario_confirmacion_id  String?
+  observacion              String?
+  fecha_creacion           DateTime  @default(now())
+  fecha_actualizacion      DateTime? @updatedAt
+
+  // Relaciones
+  empresa                  Empresa        @relation(fields: [empresa_id], references: [id])
+  tipo_movimiento          TipoMovimiento @relation(fields: [tipo_movimiento_id], references: [id])
+  almacen_origen           Almacen        @relation("AlmacenOrigen", fields: [almacen_origen_id], references: [id])
+  ubicacion_origen         Ubicacion?     @relation("UbicacionOrigen", fields: [ubicacion_origen_id], references: [id])
+  almacen_destino          Almacen?       @relation("AlmacenDestino", fields: [almacen_destino_id], references: [id])
+  ubicacion_destino        Ubicacion?     @relation("UbicacionDestino", fields: [ubicacion_destino_id], references: [id])
+  usuario                  Usuario        @relation("MovimientoUsuario", fields: [usuario_id], references: [id])
+  usuario_confirmacion     Usuario?       @relation("MovimientoUsuarioConfirmacion", fields: [usuario_confirmacion_id], references: [id])
+  detalles                 DetalleMovimiento[]
+
+  @@map("movimientos_inventario")
+}
+
+model DetalleMovimiento {
+  id                          String   @id @default(uuid())
+  movimiento_id               String
+  producto_id                 String
+  producto_unidad_medida_id   String
+  cantidad                    Decimal  @db.Decimal(14, 4)
+  lote                        String?
+  serie                       String?
+  observacion_detalle         String?
+  fecha_creacion              DateTime @default(now())
+
+  // Relaciones
+  movimiento                  MovimientoInventario @relation(fields: [movimiento_id], references: [id], onDelete: Cascade)
+  producto                    Producto             @relation(fields: [producto_id], references: [id])
+  producto_unidad_medida      ProductoUnidadMedida @relation(fields: [producto_unidad_medida_id], references: [id])
+
+  @@map("detalles_movimiento")
 }
