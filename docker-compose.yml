@@ -9,7 +9,7 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       TZ: America/Bogota
     ports:
-      - "5432:5432"
+      - 5432:5432
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
@@ -19,20 +19,20 @@ services:
       retries: 5
 
   backend:
-    image: node:20-alpine
     container_name: inventarios_backend
-    working_dir: /app
+    build:
+      context: ./
     command: sh -c "npm install && npm run start:dev"
-    volumes:
-      - ./backend:/app
     ports:
-      - "3000:3000"
+      - 3000:3000
+    env_file:
+      - ./.env
     environment:
       NODE_ENV: development
       TZ: America/Bogota
-      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:${POSTGRES_PORT}/${POSTGRES_DB}
       DB_HOST: postgres
-      DB_PORT: 5432
+      DB_PORT: ${POSTGRES_PORT}
       DB_NAME: ${POSTGRES_DB}
       DB_USER: ${POSTGRES_USER}
       DB_PASSWORD: ${POSTGRES_PASSWORD}
