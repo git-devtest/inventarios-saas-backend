@@ -17,20 +17,25 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - inventarios_network
 
   backend:
+    image: node:20-alpine
     container_name: inventarios_backend
-    build:
-      context: ./
+    working_dir: /app
     command: sh -c "npm install && npm run start:dev"
+    volumes:
+      - ./:/app             # Sincroniza todo el código
+      - /app/node_modules   # Evita sobrescribir node_modules
     ports:
-      - 3000:3000
-    env_file:
-      - ./.env
+      - 3000:3000  
     environment:
       NODE_ENV: development
       TZ: America/Bogota
+      # URL para conectar con la base de datos PostgreSQL
       DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:${POSTGRES_PORT}/${POSTGRES_DB}
+      # Variables de configuración de la base de datos
       DB_HOST: postgres
       DB_PORT: ${POSTGRES_PORT}
       DB_NAME: ${POSTGRES_DB}
@@ -41,6 +46,12 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+    networks:
+      - inventarios_network
 
 volumes:
   postgres_data:
+
+networks:
+  inventarios_network:
+    driver: bridge
