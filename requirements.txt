@@ -1,8 +1,5 @@
 # Requisitos del sistema para Inventarios SaaS
 
-Docker >= 27.x
-Docker Compose >= 2.30
-
 Node.js >= 20.x
 npm >= 10.x
 

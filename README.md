@@ -32,11 +32,12 @@ inventarios-saas-backend/
 ├── docs/               # Documentación funcional y técnica
 ├── prisma/             # Schema y migraciones
 ├── src/                # Código fuente
-└── test/               # Tests unitarios e integración
+├── test/               # Tests unitarios e integración
 │
 ├── .env                # Variables de entorno (NO subir a git)
 ├── .gitignore          # Archivos ignorados por git
-├── docker-compose.yml  # Infraestructura local
+├── package.json        # Dependencias del proyecto
+├── package-lock.json   # Lock de dependencias
 ├── prisma.config.ts    # Configuración de Prisma
 ├── README.md           # Usted está aquí
 └── requirements.txt    # Requerimientos del sistema
@@ -50,29 +51,18 @@ requirements.txt
 ## Variables de Entorno
 Ejemplo mínimo del archivo .env:
 ```bash
+POSTGRES_HOST=localhost
+POSTGRES_DB=nombre_de_la_base_de_datos
 POSTGRES_USER=usuario_de_la_base_de_datos
 POSTGRES_PASSWORD=contraseña_de_la_base_de_datos
-POSTGRES_DB=nombre_de_la_base_de_datos
+POSTGRES_PORT=5432
 
-DATABASE_URL=postgresql://usuario_de_la_base_de_datos:contraseña_de_la_base_de_datos@postgres:5432/nombre_de_la_base_de_datos
-
+NODE_ENV=development
+BACKEND_PORT=3000
 JWT_SECRET=clave_super_secreta_de_128_bits
 JWT_EXPIRES_IN=1h
-TZ=America/Bogota
-```
 
-## Inicialización del Proyecto
-1. Levantar infraestructura
-```bash
-docker compose up -d
-```
-2. Acceder al contenedor backend
-```bash
-docker exec -it inventarios_backend sh
-```
-3. Ejecutar migraciones
-```bash
-npx prisma migrate dev
+TZ=America/Bogota
 ```
 
 ## Documentación API (Swagger)
@@ -125,9 +115,9 @@ Actualmente implementado:
 - Infraestructura base
 - Modelos: Empresa, Rol, Usuario
 - Migraciones versionadas
+- Seed inicial
 
 Próximo bloque:
-- Seed inicial
 - Autenticación
 - Módulo Inventarios (Kardex)
 
