@@ -1,8 +1,7 @@
 {
-    "editor.fontFamily": "'JetBrains Mono', Consolas, 'Courier New', monospace",
-    "editor.fontSize": 13,
-    "workbench.colorTheme": "Monokai Dimmed",
-    
+    "editor.fontFamily": "JetBrains Mono",
+    "editor.fontSize": 14,
+    "workbench.colorTheme": "Default Dark Modern",
     "files.watcherExclude": {
         "**/node_modules/**": true,
         "**/dist/**": true,
