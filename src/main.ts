@@ -17,6 +17,7 @@ async function bootstrap() {
     .setDescription('API para gestionar inventarios de productos')
     .setVersion('1.0')
     .addTag('Inventarios')
+    .addBearerAuth()
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
