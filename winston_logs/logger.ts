@@ -6,7 +6,7 @@ export const logger = createLogger({
         format.colorize(), // Adds color to the log levels
         format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }), // Adds a timestamp to each log
         format.printf(({ timestamp, level, message }) => {
-            return `${timestamp} ${level}: ${message}`;
+            return `${timestamp} - ${level}:=>${message}`;
         })
     ),
     transports: [
