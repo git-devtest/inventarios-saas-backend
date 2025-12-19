@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
@@ -28,7 +29,7 @@ async function bootstrap() {
   // CORS
   app.enableCors();
 
-  const port = process.env.PORT || 3001;
+  const port = process.env.PORT || 3000;
   await app.listen(port);
 
   console.log(`🚀 Application is running on: http://localhost:${port}/api`);

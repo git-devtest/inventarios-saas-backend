@@ -1,9 +1,19 @@
-// prisma/seed.ts
+import 'dotenv/config';
 import { PrismaPg } from '@prisma/adapter-pg';
-import { PrismaClient } from './generated/client';
+import { PrismaClient } from '@prisma/client';
+import { Pool } from 'pg'
 import * as bcrypt from 'bcrypt';
 
-const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL })
+// Usar variables individuales para mayor robustez
+const pool = new Pool({
+  host: process.env.POSTGRES_HOST || 'localhost',
+  port: parseInt(process.env.POSTGRES_PORT || '5432'),
+  user: process.env.POSTGRES_USER,
+  password: process.env.POSTGRES_PASSWORD,
+  database: process.env.POSTGRES_DB,
+});
+
+const adapter = new PrismaPg(pool);
 const prisma = new PrismaClient({ adapter });
 
 async function main() {
@@ -32,7 +42,7 @@ async function main() {
   // 2. CREAR ROLES DEL SISTEMA
   // ========================================
   console.log('📋 Creando roles del sistema...');
-  
+
   const rolAdmin = await prisma.rol.create({
     data: {
       nombre: 'Administrador',
@@ -60,7 +70,7 @@ async function main() {
   // 3. CREAR UNIDADES DE MEDIDA DEL SISTEMA
   // ========================================
   console.log('📏 Creando unidades de medida...');
-  
+
   const unidades = await Promise.all([
     prisma.unidadMedida.create({ data: { nombre: 'Unidad', abreviatura: 'UN', tipo: 'unidad' } }),
     prisma.unidadMedida.create({ data: { nombre: 'Kilogramo', abreviatura: 'KG', tipo: 'peso' } }),
@@ -90,7 +100,7 @@ async function main() {
   // 4. CREAR TIPOS DE MOVIMIENTO DEL SISTEMA
   // ========================================
   console.log('📦 Creando tipos de movimiento...');
-  
+
   const tipoEntrada = await prisma.tipoMovimiento.create({
     data: {
       codigo: 'ENTRADA',
@@ -147,7 +157,7 @@ async function main() {
   // 5. CREAR EMPRESA DEMO 1
   // ========================================
   console.log('🏢 Creando empresa demo 1...');
-  
+
   const empresa1 = await prisma.empresa.create({
     data: {
       nombre: 'Distribuidora El Éxito SAS',
@@ -346,7 +356,7 @@ async function main() {
   // 6. CREAR EMPRESA DEMO 2 (MULTI-TENANT)
   // ========================================
   console.log('🏢 Creando empresa demo 2...');
-  
+
   const empresa2 = await prisma.empresa.create({
     data: {
       nombre: 'TechStore Colombia LTDA',
@@ -402,7 +412,7 @@ async function main() {
   // 7. CREAR MOVIMIENTO DE INVENTARIO DE EJEMPLO
   // ========================================
   console.log('📦 Creando movimiento de inventario de ejemplo...');
-  
+
   const movimiento1 = await prisma.movimientoInventario.create({
     data: {
       empresa_id: empresa1.id,
@@ -455,7 +465,7 @@ async function main() {
   console.log('═══════════════════════════════════════════════════');
   console.log('🎉 SEED COMPLETADO EXITOSAMENTE!');
   console.log('═══════════════════════════════════════════════════\n');
-  
+
   console.log('📊 RESUMEN:');
   console.log(`  - Roles: 3`);
   console.log(`  - Unidades de medida: ${unidades.length}`);
@@ -466,7 +476,7 @@ async function main() {
   console.log(`  - Ubicaciones: 3`);
   console.log(`  - Productos: 4`);
   console.log(`  - Movimientos: 1 (confirmado)\n`);
-  
+
   console.log('🔑 CREDENCIALES DE ACCESO:\n');
   console.log('  📧 Empresa 1 - Distribuidora El Éxito:');
   console.log('     Admin: admin@elexito.com / Admin123!');
