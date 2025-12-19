@@ -46,7 +46,6 @@ export class AuthService {
 
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { password_hash, ...result } = user;
-        console.log(`Usuario: [${email}] registrado exitosamente`);
         logger.info(`Usuario: [${email}] registrado exitosamente`);
         return result;
     }
@@ -59,9 +58,10 @@ export class AuthService {
     async login(loginDto: LoginDto) {
         const { email, password } = loginDto;
 
-        // Buscar el usuario
+        // Buscar el usuario con su rol
         const user = await this.prisma.usuario.findUnique({
             where: { email },
+            include: { rol: true }
         });
 
         if (!user) {
@@ -79,13 +79,13 @@ export class AuthService {
         const payload = {
             sub: user.id,
             email: user.email,
+            nombre: user.nombre,
             empresa_id: user.empresa_id,
-            rol_id: user.rol_id
+            rol_id: user.rol_id,
+            rol_nombre: user.rol.nombre
         };
-
-        console.log(`Usuario: [${user.email}] logueado exitosamente`);
         logger.info(`Usuario: [${user.email}] logueado exitosamente`);
-        
+
         return {
             access_token: await this.jwtService.signAsync(payload),
             user: {
