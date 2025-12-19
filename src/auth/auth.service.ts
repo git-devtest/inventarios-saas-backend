@@ -13,6 +13,11 @@ export class AuthService {
         private jwtService: JwtService,
     ) { }
 
+    /**
+     * Método para registrar un nuevo usuario
+     * @param registerDto Datos del usuario para registrar
+     * @returns Datos del usuario registrado
+     */
     async register(registerDto: RegisterDto) {
         const { email, nombre, password, empresa_id, rol_id } = registerDto;
 
@@ -41,6 +46,8 @@ export class AuthService {
 
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { password_hash, ...result } = user;
+        console.log(`Usuario: [${email}] registrado exitosamente`);
+        logger.info(`Usuario: [${email}] registrado exitosamente`);
         return result;
     }
 
@@ -76,6 +83,7 @@ export class AuthService {
             rol_id: user.rol_id
         };
 
+        console.log(`Usuario: [${user.email}] logueado exitosamente`);
         logger.info(`Usuario: [${user.email}] logueado exitosamente`);
         
         return {
