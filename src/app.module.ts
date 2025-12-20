@@ -7,6 +7,7 @@ import { AuthModule } from './auth/auth.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { UsuariosModule } from './modules/usuarios/usuarios.module';
+import { ProductosModule } from './modules/productos/productos.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { UsuariosModule } from './modules/usuarios/usuarios.module';
     PrismaModule,
     AuthModule,
     UsuariosModule,
+    ProductosModule,
     ServeStaticModule.forRoot({ 
       rootPath: join(__dirname, '..', 'public'),
       exclude: ['/api/{*test}'],
