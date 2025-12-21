@@ -6,11 +6,11 @@ export const logger = createLogger({
         format.colorize(), // Adds color to the log levels
         format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }), // Adds a timestamp to each log
         format.printf(({ timestamp, level, message }) => {
-            return `${timestamp} - ${level}:=>${message}`;
+            return `${timestamp}-${level}:=>${message}`;
         })
     ),
     transports: [
-        new transports.Console(),
+        //new transports.Console(),
         new transports.File({ filename: './winston_logs/app.log' }) // Logs will be saved to winston_logs/app.log
     ]
 });
