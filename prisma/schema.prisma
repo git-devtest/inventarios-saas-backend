@@ -94,6 +94,7 @@ model Ubicacion {
   codigo              String
   nivel               Int         @default(1)
   ruta_completa       String?
+  activo              Boolean     @default(true)
   fecha_creacion      DateTime    @default(now())
   fecha_actualizacion DateTime?   @updatedAt
 
