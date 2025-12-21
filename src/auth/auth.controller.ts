@@ -8,13 +8,13 @@ import { AuthDocs } from './docs/auth.docs';
 export class AuthController {
     constructor(private authService: AuthService) { }
 
-    @AuthDocs.registerDocs()
+    @AuthDocs.registerUser()
     @Post('register')
     async register(@Body() registerDto: RegisterDto) {
         return this.authService.register(registerDto);
     }
 
-    @AuthDocs.loginDocs()
+    @AuthDocs.loginUser()
     @Post('login')
     async login(@Body() loginDto: LoginDto) {
         return this.authService.login(loginDto);
