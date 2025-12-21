@@ -240,6 +240,38 @@ export class ProductosService {
   }
 
   /**
+   * @description Reactivar producto (soft delete)
+   * @summary Reactivar producto
+   * @param id ID del producto
+   * @param empresaId ID de la empresa
+   * @returns Producto reactivado
+   */
+  async activateProducto(id: string, empresaId: string) {
+    const producto = await this.prisma.producto.findFirst({
+      where: { id, empresa_id: empresaId },
+    });
+
+    if (!producto) {
+      throw new NotFoundException(`Producto con ID ${id} no encontrado`);
+    }
+
+    if (producto.activo) {
+      throw new BadRequestException('El producto ya está activo');
+    }
+
+    await this.prisma.producto.update({
+      where: { id },
+      data: { activo: true },
+    });
+
+    this.logger.log(`Producto con ID [${id}] reactivado correctamente`);
+    return {
+      message: 'Producto reactivado correctamente',
+      id,
+    };
+  }
+
+  /**
    * @description Agregar unidad de medida a un producto
    * @summary Agregar unidad de medida
    * @param productoId ID del producto

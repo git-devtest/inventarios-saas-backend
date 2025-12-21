@@ -994,5 +994,66 @@ export const ProductosDocs = {
         )
     },
 
+    activateProducto: () => {
+        return applyDecorators(
+            ApiTags('Productos'),
+            ApiBearerAuth(),
+            ApiOperation({ 
+                summary: 'Reactivar un producto',
+                description: 'Reactivar un producto'
+            }),
+            ApiResponse({ status: 200, description: 'Producto reactivado',
+                example: {
+                    "success": true,
+                    "data": {
+                        "message": "Producto reactivado correctamente",
+                        "id": "ee0226a8-999a-4823-8a7a-c75f0ef05ff7"
+                    },
+                    "timestamp": "2025-12-21T20:17:35.164Z"
+                }
+            }),
+            ApiResponse({ status: 400, description: 'Error en la solicitud',
+                example: {
+                    "success":false,
+                    "statusCode":400,
+                    "message":"El producto ya está activo.",
+                    "errors":null,
+                    "timestamp":"2025-12-20T22:35:58.708Z",
+                    "path":"/api/productos/68414fd6-d298-424d-aecf-83295a68f3c7/activate"
+                }
+            }),
+            ApiResponse({ status: 401, description: 'No autenticado',
+                example: {
+                    "success":false,
+                    "statusCode":401,
+                    "message":"No autorizado. Token inválido o expirado.",
+                    "errors":null,
+                    "timestamp":"2025-12-20T21:37:36.279Z",
+                    "path":"/api/productos/68414fd6-d298-424d-aecf-83295a68f3c7/activate"
+                }
+            }),
+            ApiResponse({ status: 403, description: 'No autorizado',
+                example: {
+                    "success":false,
+                    "statusCode":403,
+                    "message":"No autorizado. Token inválido o expirado.",
+                    "errors":null,
+                    "timestamp":"2025-12-20T21:37:36.279Z",
+                    "path":"/api/productos/68414fd6-d298-424d-aecf-83295a68f3c7/activate"
+                }
+            }),
+            ApiResponse({ status: 404, description: 'Producto no encontrado',
+                example: {
+                    "success":false,
+                    "statusCode":404,
+                    "message":"Cannot POST /api/productos/68414fd6-d298-424d-aecf-83295a68f3c7/activate",
+                    "errors":null,
+                    "timestamp":"2025-12-20T21:37:36.279Z",
+                    "path":"/api/productos/68414fd6-d298-424d-aecf-83295a68f3c7/activate"
+                }
+            })
+        )
+    },
+
 }
   

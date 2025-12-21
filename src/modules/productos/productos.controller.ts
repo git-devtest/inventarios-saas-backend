@@ -137,4 +137,15 @@ export class ProductosController {
   ) {
     return this.productosService.configStock(id, configDto, user.empresaId);
   }
+
+  /**
+   * PATCH /api/productos/:id/activate
+   * Reactivar un producto desactivado
+   */
+  @Patch(':id/activate')
+  @Roles('Administrador')
+  @ProductosDocs.activateProducto()
+  activate(@Param('id') id: string, @currentUserDecorator.CurrentUser() user: currentUserDecorator.UserPayload) {
+    return this.productosService.activateProducto(id, user.empresaId);
+  }
 }

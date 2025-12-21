@@ -46,11 +46,7 @@ export class UsuariosController {
    */
   @Get(':id')
   @UsuariosDocs.findOne()
-  findOne(
-    @Param('id') id: string, 
-    @currentUserDecorator.CurrentUser() 
-    user: currentUserDecorator.UserPayload
-  ) {
+  findOne(id: string, @currentUserDecorator.CurrentUser() user: currentUserDecorator.UserPayload) {
     return this.usuariosService.findOne(id, user.empresaId);
   }
 
@@ -67,7 +63,7 @@ export class UsuariosController {
   @Roles('Administrador') // Solo administradores pueden crear usuarios
   @UsuariosDocs.create()
   create(
-    @Body() createUsuarioDto: CreateUsuarioDto,
+    createUsuarioDto: CreateUsuarioDto,
     @currentUserDecorator.CurrentUser() 
     user: currentUserDecorator.UserPayload
   ) {
@@ -88,8 +84,8 @@ export class UsuariosController {
   @Roles('Administrador')
   @UsuariosDocs.update()
   update(
-    @Param('id') id: string,
-    @Body() updateUsuarioDto: UpdateUsuarioDto,
+    id: string,
+    updateUsuarioDto: UpdateUsuarioDto,
     @currentUserDecorator.CurrentUser() 
     user: currentUserDecorator.UserPayload
   ) {

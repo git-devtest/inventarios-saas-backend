@@ -1,5 +1,7 @@
 import { applyDecorators } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags, ApiParam, ApiBearerAuth } from '@nestjs/swagger';
+import { ApiOperation, ApiResponse, ApiTags, ApiParam, ApiBearerAuth, ApiBody } from '@nestjs/swagger';
+import { UpdateUsuarioDto } from '../dto/update-usuario.dto';
+import { CreateUsuarioDto } from '../dto/create-usuario.dto';
 
 export const UsuariosDocs = {
     findAll: () => {
@@ -229,6 +231,7 @@ export const UsuariosDocs = {
             ApiOperation({ summary: 'Crear un nuevo usuario',
                 description: 'Crea un nuevo usuario'
             }),
+            ApiBody({ type: CreateUsuarioDto }),
             ApiResponse({ status: 201, 
                 description: 'Usuario creado correctamente.',
                 example: {
@@ -291,6 +294,7 @@ export const UsuariosDocs = {
                 description: 'Actualiza un usuario por ID'
              }),
             ApiParam({ name: 'id', description: 'ID único del usuario' }),
+            ApiBody({ type: UpdateUsuarioDto }),
             ApiResponse({ status: 200, description: 'Usuario actualizado correctamente.',
                 example: {
                     "success": true,
@@ -365,22 +369,12 @@ export const UsuariosDocs = {
             ApiParam({ name: 'id', description: 'ID único del usuario' }),
             ApiResponse({ status: 200, description: 'Usuario eliminado correctamente.',
                 example: {
-                    "success":true,
-                    "data":{
-                        "id":"d36d1d3e-7296-4fd4-9f9d-ac30d23f5813",
-                        "nombre":"María López",
-                        "email":"operador@elexito.com",
-                        "activo":false,
-                        "empresa_id":"7143462f-9cfd-4201-91ab-a38bb3fc50c7",
-                        "rol_id":"f5d0ab98-86ca-438a-9a8d-ad45165f6089",
-                        "fecha_creacion":"2025-12-19T03:10:22.227Z",
-                        "fecha_actualizacion":"2025-12-19T22:03:09.520Z",
-                        "rol":{
-                            "id":"f5d0ab98-86ca-438a-9a8d-ad45165f6089",
-                            "nombre":"Operador"
-                        }
+                    "success": true,
+                    "data": {
+                        "message": "Usuario desactivado correctamente",
+                        "id": "1fd53c6b-9499-44b6-adf2-a49dee2e7378"
                     },
-                    "timestamp":"2025-12-19T22:03:09.664Z"
+                    "timestamp": "2025-12-21T20:24:51.607Z"
                 }
             }),
             ApiResponse({ status: 400, description: 'Error en la solicitud.',
