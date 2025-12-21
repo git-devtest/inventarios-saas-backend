@@ -1,0 +1,5 @@
+* text=auto
+
+# Prisma / DB
+*.sql   text eol=lf
+*.toml  text eol=lf
