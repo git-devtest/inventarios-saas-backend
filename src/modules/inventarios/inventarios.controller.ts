@@ -5,6 +5,7 @@ import {
   Patch,
   Body,
   Param,
+  Query,
   UseGuards,
   BadRequestException,
 } from '@nestjs/common';
@@ -297,7 +298,7 @@ export class InventariosController {
     },
   })
   async getStock(
-    @Body() filtros: FiltroStockDto,
+    @Query() filtros: FiltroStockDto,
     @CurrentUser() user: any,
   ) {
     return this.inventariosService.getStock(filtros, user.empresa_id);
@@ -347,7 +348,7 @@ export class InventariosController {
     },
   })
   async getKardex(
-    @Body() filtros: FiltroKardexDto,
+    @Query() filtros: FiltroKardexDto,
     @CurrentUser() user: any,
   ) {
     return this.inventariosService.getKardex(filtros, user.empresa_id);

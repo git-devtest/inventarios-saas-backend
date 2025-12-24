@@ -1,0 +1,6 @@
+{
+  "tipo_movimiento_id": "550e8400-e29b-41d4-a716-446655440001",
+  "almacen_origen_id": "550e8400-e29b-41d4-a716-446655440002",
+  "fecha_movimiento": "{{timestamp}}",
+  "observacion": "Entrada de mercadería nueva"
+}
