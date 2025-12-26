@@ -32,7 +32,7 @@ export class UsuariosController {
   @Get()
   @UsuariosDocs.findAll()
   findAll( @currentUserDecorator.CurrentUser() user: currentUserDecorator.UserPayload ) {
-    return this.usuariosService.findAll(user.empresaId);
+    return this.usuariosService.findAll(user.empresa_id);
   }
 
   /**
@@ -47,7 +47,7 @@ export class UsuariosController {
   @Get(':id')
   @UsuariosDocs.findOne()
   findOne(id: string, @currentUserDecorator.CurrentUser() user: currentUserDecorator.UserPayload) {
-    return this.usuariosService.findOne(id, user.empresaId);
+    return this.usuariosService.findOne(id, user.empresa_id);
   }
 
   /**
@@ -89,7 +89,7 @@ export class UsuariosController {
     @currentUserDecorator.CurrentUser() 
     user: currentUserDecorator.UserPayload
   ) {
-    return this.usuariosService.update(id, updateUsuarioDto, user.empresaId);
+    return this.usuariosService.update(id, updateUsuarioDto, user.empresa_id);
   }
 
   /**
@@ -109,7 +109,7 @@ export class UsuariosController {
     @currentUserDecorator.CurrentUser() 
     user: currentUserDecorator.UserPayload
   ) {
-    return this.usuariosService.remove(id, user.empresaId);
+    return this.usuariosService.remove(id, user.empresa_id);
   }
 
   /**
@@ -129,6 +129,6 @@ export class UsuariosController {
     @currentUserDecorator.CurrentUser() 
     user: currentUserDecorator.UserPayload
   ) {
-    return this.usuariosService.activate(id, user.empresaId);
+    return this.usuariosService.activate(id, user.empresa_id);
   }
 }

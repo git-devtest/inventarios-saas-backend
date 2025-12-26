@@ -28,7 +28,7 @@ export class AlmacenesController {
   @Roles('Administrador')
   @AlmacenesDocs.activateAlmacen()
   activate( id: string, @currentUserDecorator.CurrentUser() user: currentUserDecorator.UserPayload) {
-    return this.almacenesService.activateAlmacen(id, user.empresaId);
+    return this.almacenesService.activateAlmacen(id, user.empresa_id);
   }
 
   /**
@@ -44,7 +44,7 @@ export class AlmacenesController {
   ) {
     return this.almacenesService.findAllUbicaciones(
       almacen_id,
-      user.empresaId,
+      user.empresa_id,
     );
   }
 
@@ -57,7 +57,7 @@ export class AlmacenesController {
   @AlmacenesDocs.findAllAlmacenes()
   findAll(
     @currentUserDecorator.CurrentUser() user: currentUserDecorator.UserPayload) {
-    return this.almacenesService.findAllAlmacenes(user.empresaId);
+    return this.almacenesService.findAllAlmacenes(user.empresa_id);
   }
 
   /**
@@ -70,7 +70,7 @@ export class AlmacenesController {
   findOne(
     @Param('id') id: string, 
     @currentUserDecorator.CurrentUser() user: currentUserDecorator.UserPayload) {
-    return this.almacenesService.findOneAlmacen(id, user.empresaId);
+    return this.almacenesService.findOneAlmacen(id, user.empresa_id);
   }
 
   /**
@@ -86,7 +86,7 @@ export class AlmacenesController {
   ) {
     return this.almacenesService.createAlmacen(
       createAlmacenDto,
-      user.empresaId,
+      user.empresa_id,
     );
   }
 
@@ -105,7 +105,7 @@ export class AlmacenesController {
     return this.almacenesService.updateAlmacen(
       id,
       updateAlmacenDto,
-      user.empresaId,
+      user.empresa_id,
     );
   }
 
@@ -119,7 +119,7 @@ export class AlmacenesController {
   remove(
     @Param('id') id: string, 
     @currentUserDecorator.CurrentUser() user: currentUserDecorator.UserPayload) {
-    return this.almacenesService.removeAlmacen(id, user.empresaId);
+    return this.almacenesService.removeAlmacen(id, user.empresa_id);
   }
 
   // ==========================================
@@ -137,7 +137,7 @@ export class AlmacenesController {
     @Param('almacen_id') almacen_id: string,
     @currentUserDecorator.CurrentUser() user: currentUserDecorator.UserPayload,
   ) {
-    return this.almacenesService.getJerarquia(almacen_id, user.empresaId);
+    return this.almacenesService.getJerarquia(almacen_id, user.empresa_id);
   }
 
   /**
@@ -155,7 +155,7 @@ export class AlmacenesController {
     return this.almacenesService.findOneUbicacion(
       id,
       almacen_id,
-      user.empresaId,
+      user.empresa_id,
     );
   }
 
@@ -174,7 +174,7 @@ export class AlmacenesController {
     return this.almacenesService.createUbicacion(
       almacen_id,
       createUbicacionDto,
-      user.empresaId,
+      user.empresa_id,
     );
   }
 
@@ -195,7 +195,7 @@ export class AlmacenesController {
       id,
       almacen_id,
       updateUbicacionDto,
-      user.empresaId,
+      user.empresa_id,
     );
   }
 
@@ -214,7 +214,7 @@ export class AlmacenesController {
     return this.almacenesService.removeUbicacion(
       id,
       almacen_id,
-      user.empresaId,
+      user.empresa_id,
     );
   }
 
@@ -233,7 +233,7 @@ export class AlmacenesController {
     return this.almacenesService.activateUbicacion(
       id,
       almacen_id,
-      user.empresaId,
+      user.empresa_id,
     );
   }
 }

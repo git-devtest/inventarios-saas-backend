@@ -9,6 +9,7 @@ import { join } from 'path';
 import { UsuariosModule } from './modules/usuarios/usuarios.module';
 import { ProductosModule } from './modules/productos/productos.module';
 import { AlmacenesModule } from './modules/almacenes/almacenes.module';
+import { InventariosModule } from './modules/inventarios/inventarios.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { AlmacenesModule } from './modules/almacenes/almacenes.module';
     UsuariosModule,
     ProductosModule,
     AlmacenesModule,
+    InventariosModule,
     ServeStaticModule.forRoot({ 
       rootPath: join(__dirname, '..', 'public'),
       exclude: ['/api/{*test}'],

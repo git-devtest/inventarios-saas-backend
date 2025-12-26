@@ -37,7 +37,7 @@ export class ProductosController {
     @Query('q') query: string,
     @currentUserDecorator.CurrentUser() user: currentUserDecorator.UserPayload,
   ) {
-    return this.productosService.search(user.empresaId, query);
+    return this.productosService.search(user.empresa_id, query);
   }
 
   /**
@@ -48,7 +48,7 @@ export class ProductosController {
   @Roles('Administrador')
   @ProductosDocs.findAll()
   findAll(@currentUserDecorator.CurrentUser() user: currentUserDecorator.UserPayload) {
-    return this.productosService.findAll(user.empresaId);
+    return this.productosService.findAll(user.empresa_id);
   }
 
   /**
@@ -62,7 +62,7 @@ export class ProductosController {
     @Param('id') id: string,
     @currentUserDecorator.CurrentUser() user: currentUserDecorator.UserPayload,
   ) {
-    return this.productosService.findOne(id, user.empresaId);
+    return this.productosService.findOne(id, user.empresa_id);
   }
 
   /**
@@ -76,7 +76,7 @@ export class ProductosController {
     @Body() createProductoDto: CreateProductoDto,
     @currentUserDecorator.CurrentUser() user: currentUserDecorator.UserPayload,
   ) {
-    return this.productosService.create(createProductoDto, user.empresaId);
+    return this.productosService.create(createProductoDto, user.empresa_id);
   }
 
   /**
@@ -91,7 +91,7 @@ export class ProductosController {
     @Body() updateProductoDto: UpdateProductoDto,
     @currentUserDecorator.CurrentUser() user: currentUserDecorator.UserPayload,
   ) {
-    return this.productosService.update(id, updateProductoDto, user.empresaId);
+    return this.productosService.update(id, updateProductoDto, user.empresa_id);
   }
 
   /**
@@ -105,7 +105,7 @@ export class ProductosController {
     @Param('id') id: string,
     @currentUserDecorator.CurrentUser() user: currentUserDecorator.UserPayload,
   ) {
-    return this.productosService.remove(id, user.empresaId);
+    return this.productosService.remove(id, user.empresa_id);
   }
 
   /**
@@ -120,7 +120,7 @@ export class ProductosController {
     @Body() addUnidadDto: AddUnidadMedidaDto,
     @currentUserDecorator.CurrentUser() user: currentUserDecorator.UserPayload,
   ) {
-    return this.productosService.addUnidadMedida(id, addUnidadDto, user.empresaId);
+    return this.productosService.addUnidadMedida(id, addUnidadDto, user.empresa_id);
   }
 
   /**
@@ -135,7 +135,7 @@ export class ProductosController {
     @Body() configDto: ConfigStockDto,
     @currentUserDecorator.CurrentUser() user: currentUserDecorator.UserPayload,
   ) {
-    return this.productosService.configStock(id, configDto, user.empresaId);
+    return this.productosService.configStock(id, configDto, user.empresa_id);
   }
 
   /**
@@ -146,6 +146,6 @@ export class ProductosController {
   @Roles('Administrador')
   @ProductosDocs.activateProducto()
   activate(@Param('id') id: string, @currentUserDecorator.CurrentUser() user: currentUserDecorator.UserPayload) {
-    return this.productosService.activateProducto(id, user.empresaId);
+    return this.productosService.activateProducto(id, user.empresa_id);
   }
 }

@@ -28,7 +28,7 @@ export class RolesGuard implements CanActivate {
     }
 
     // Verificar si el usuario tiene alguno de los roles requeridos
-    const hasRole = requiredRoles.includes(user.rolNombre);
+    const hasRole = requiredRoles.includes(user.rol_nombre);
 
     if (!hasRole) {
       throw new ForbiddenException(
