@@ -2,17 +2,26 @@ import { IsUUID, IsNotEmpty, IsOptional, IsString, IsDateString } from 'class-va
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class CreateMovimientoDto {
-  @ApiProperty({ example: 'uuid-tipo-movimiento' })
+  @ApiProperty({ 
+    example: 'uuid-tipo-movimiento',
+    description: 'Identificador del tipo de movimiento',
+  })
   @IsUUID()
   @IsNotEmpty()
   tipo_movimiento_id: string;
 
-  @ApiProperty({ example: 'uuid-almacen-origen' })
+  @ApiProperty({ 
+    example: 'uuid-almacen-origen',
+    description: 'Almacén de origen del movimiento',
+  })
   @IsUUID()
   @IsNotEmpty()
   almacen_origen_id: string;
 
-  @ApiPropertyOptional({ example: 'uuid-ubicacion-origen' })
+  @ApiPropertyOptional({ 
+    example: 'uuid-ubicacion-origen',
+    description: 'Ubicación dentro del almacén de origen',
+  })
   @IsUUID()
   @IsOptional()
   ubicacion_origen_id?: string;
@@ -25,7 +34,10 @@ export class CreateMovimientoDto {
   @IsOptional()
   almacen_destino_id?: string;
 
-  @ApiPropertyOptional({ example: 'uuid-ubicacion-destino' })
+  @ApiPropertyOptional({ 
+    example: 'uuid-ubicacion-destino',
+    description: 'Ubicación dentro del almacén de destino (requerido solo para transferencias)'
+  })
   @IsUUID()
   @IsOptional()
   ubicacion_destino_id?: string;
@@ -38,7 +50,11 @@ export class CreateMovimientoDto {
   @IsOptional()
   fecha_movimiento?: string;
 
-  @ApiPropertyOptional({ example: 'Entrada por compra a proveedor XYZ' })
+  @ApiPropertyOptional({ 
+    example: 'Entrada por compra a proveedor XYZ',
+    required: false,
+    description: 'Observaciones adicionales sobre el movimiento'
+  })
   @IsString()
   @IsOptional()
   observacion?: string;
