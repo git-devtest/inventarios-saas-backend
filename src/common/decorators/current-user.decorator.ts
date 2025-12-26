@@ -4,9 +4,9 @@ export interface UserPayload {
   id: string;
   email: string;
   nombre: string;
-  empresaId: string;
-  rolId: string;
-  rolNombre: string;
+  empresa_id: string;
+  rol_id: string;
+  rol_nombre: string;
 }
 
 /**

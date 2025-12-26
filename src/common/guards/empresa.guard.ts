@@ -28,7 +28,7 @@ export class EmpresaGuard implements CanActivate {
     }
 
     // Verificar que el empresaId del request coincida con el del usuario
-    if (empresaId !== user.empresaId) {
+    if (empresaId !== user.empresa_id) {
       throw new ForbiddenException('No tiene acceso a recursos de otra empresa');
     }
 
